@@ -60,13 +60,24 @@ viewValidation : Model -> Html msg
 viewValidation model =
   let
     (color, message) =
-      if length model.password < 8 then
-        ("red", "Password too short")
-      else if not (any isDigit model.password) then
-        ("red", "Password has to contain numbers")
+      if not (passwordValidation model.password) then
+        ("red", "Password has to contain numbers, uppers character and lower characters")
       else if model.password == model.passwordAgain then
         ("green", "OK")
       else
         ("red", "Passwords do not match!")
   in
     div [ style [("color", color)] ] [ text message ]
+
+passwordValidation : String -> Bool
+passwordValidation s =
+  if length s < 8 then
+    False
+  else if not (any isDigit s) then
+    False
+  else if not (any isUpper s) then
+    False
+  else if not (any isLower s) then
+    False
+  else
+    True
